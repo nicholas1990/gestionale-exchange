@@ -23,15 +23,13 @@ export class ItemCreatePage {
       name: ['', Validators.required],
       about: ['']
     });
+  }
 
+  ionViewDidLoad() {
     // Watch the form for changes, and
     this.form.valueChanges.subscribe((v) => {
       this.isReadyToSave = this.form.valid;
     });
-  }
-
-  ionViewDidLoad() {
-
   }
 
   getPicture() {

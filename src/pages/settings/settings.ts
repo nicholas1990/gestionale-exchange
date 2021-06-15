@@ -2,8 +2,13 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
+import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
 import { Settings } from '../../providers';
+import { BetfairExchangeService } from '../../providers/betfair_exchange/betfair_exchange.service';
+
+import * as moment from 'moment';
+
 
 /**
  * The Settings page is a simple form that syncs with a Settings provider
@@ -13,9 +18,15 @@ import { Settings } from '../../providers';
 @IonicPage()
 @Component({
   selector: 'page-settings',
-  templateUrl: 'settings.html'
+  templateUrl: 'settings.html',
+  providers: [
+    BetfairExchangeService,
+  ],
 })
 export class SettingsPage {
+
+  betfair_exchange_tennis_events$: Observable<any>;
+
   // Our local settings object
   options: any;
 
@@ -34,11 +45,21 @@ export class SettingsPage {
 
   subSettings: any = SettingsPage;
 
-  constructor(public navCtrl: NavController,
+  today = new Date();
+
+  constructor(
+    public navCtrl: NavController,
     public settings: Settings,
     public formBuilder: FormBuilder,
     public navParams: NavParams,
-    public translate: TranslateService) {
+    public translate: TranslateService,
+    private readonly betfairExchangeService: BetfairExchangeService,
+  ) {
+    this.betfair_exchange_tennis_events$ = this.betfairExchangeService.get_betfair_exchange_tennis_events().pipe(
+      map(res => {
+        return [...res.response].sort((a, b) => new Date(a.event.openDate).getTime() - new Date(b.event.openDate).getTime())
+      })
+    );
   }
 
   _buildForm() {

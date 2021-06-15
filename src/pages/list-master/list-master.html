@@ -14,6 +14,8 @@
 
 <ion-content>
 
+  <!-- {{ crypto_price_list$ | async | json }} -->
+
   <ion-list>
     <ion-item-sliding *ngFor="let item of currentItems">
       <button ion-item (click)="openItem(item)">

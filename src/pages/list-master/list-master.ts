@@ -1,25 +1,45 @@
 import { Component } from '@angular/core';
 import { IonicPage, ModalController, NavController } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
 
 import { Item } from '../../models/item';
 import { Items } from '../../providers';
+import { CryptoService } from '../../providers/crypto/crypto.service';
 
 @IonicPage()
 @Component({
   selector: 'page-list-master',
-  templateUrl: 'list-master.html'
+  templateUrl: 'list-master.html',
+  providers: [CryptoService],
 })
 export class ListMasterPage {
   currentItems: Item[];
 
-  constructor(public navCtrl: NavController, public items: Items, public modalCtrl: ModalController) {
+  crypto_price_list$: Observable<any>;
+
+  constructor(
+    public navCtrl: NavController,
+    public items: Items,
+    public modalCtrl: ModalController,
+    private readonly cryptoService: CryptoService,
+  ) {
     this.currentItems = this.items.query();
+    this.crypto_price_list$ = this.cryptoService.get_price_from_crypto_compare().pipe(
+      map(res => {
+        res['ADA'] = { ...res['ADA'], img: 'dsa' };
+        return res;
+      })
+    )
+
   }
 
   /**
    * The view loaded, let's query our items for the list
    */
   ionViewDidLoad() {
+    console.log('dasasdsdasda');
+    // const crypto_price_list$ = this.cryptoService.get_price_from_crypto_compare();
   }
 
   /**
