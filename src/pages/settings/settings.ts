@@ -7,8 +7,6 @@ import { map } from 'rxjs/operators';
 import { Settings } from '../../providers';
 import { BetfairExchangeService } from '../../providers/betfair_exchange/betfair_exchange.service';
 
-import * as moment from 'moment';
-
 
 /**
  * The Settings page is a simple form that syncs with a Settings provider

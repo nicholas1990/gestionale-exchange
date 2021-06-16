@@ -13,6 +13,9 @@ export class BetfairExchangeService {
   ) { }
 
   get_betfair_exchange_tennis_events(): Observable<any> {
+
+    const test = false;
+
     const apiUrl = `http://localhost:6767/betfair_exchange_tennis_events`;
 
     const obj = {
@@ -1389,9 +1392,14 @@ export class BetfairExchangeService {
       ]
     };
 
-    return Observable.create(observer => {
+    return test ? Observable.create(observer => {
       observer.next(obj);
       observer.complete();
+    }) : new Observable<any>(observer => {
+      this.http.get(apiUrl).subscribe(
+        response => observer.next(response),
+        _ => observer.complete()
+      )
     });
 
     // return new Observable<any>(observer => {
